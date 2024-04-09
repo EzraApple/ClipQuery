@@ -1,4 +1,3 @@
-// theme.jsx
 import { extendTheme } from '@chakra-ui/react';
 
 const colors = {

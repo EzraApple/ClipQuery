@@ -1,6 +1,5 @@
-// ImageUploader.jsx
-import React, {useState} from 'react';
-import {Button, Input, useToast, VStack} from '@chakra-ui/react';
+import React from 'react';
+import {Button, Input, VStack} from '@chakra-ui/react';
 
 const ImageUploader = ({ onImageUpload }) => {
     const handleUpload = (event) => {
@@ -15,7 +14,7 @@ const ImageUploader = ({ onImageUpload }) => {
             <Input type="file" accept="image/*" onChange={handleUpload} style={{ display: 'none' }} id="image-upload" />
             <label htmlFor="image-upload">
                 <Button as="span" colorScheme="purple">
-                    Upload Image
+                    Search with Image
                 </Button>
             </label>
         </VStack>

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const sendFiles = async (files, batchSize = 100) => {
+const sendFiles = async (files, batchSize = 2000) => {
     // Determine the total number of batches
     const totalBatches = Math.ceil(files.length / batchSize);
 
