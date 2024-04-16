@@ -1,7 +1,7 @@
 import React from 'react';
 import {Button, Input, VStack} from '@chakra-ui/react';
 
-const ImageUploader = ({ onImageUpload }) => {
+const ImageUploader = ({ onImageUpload, isDisabled }) => {
     const handleUpload = (event) => {
         const file = event.target.files[0];
         if (file) {
@@ -11,7 +11,14 @@ const ImageUploader = ({ onImageUpload }) => {
 
     return (
         <VStack>
-            <Input type="file" accept="image/*" onChange={handleUpload} style={{ display: 'none' }} id="image-upload" />
+            <Input
+                disabled={isDisabled}
+                type="file"
+                accept="image/*"
+                onChange={handleUpload}
+                style={{ display: 'none' }}
+                id="image-upload"
+            />
             <label htmlFor="image-upload">
                 <Button as="span" colorScheme="purple">
                     Search with Image

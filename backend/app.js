@@ -128,13 +128,27 @@ app.post('/upload/image', async (req, res) => {
     }
 });
 
-app.post('/upload/directory', upload.array('files[]'), (req, res) => {
-  const files = req.files;
-  console.log(`${files.length} files received.`);
-  indexUploadedImages();
-  console.log(`${files.length} files indexed.`);
-  // Respond to the client
-  res.send({ message: `${files.length} files uploaded successfully.` });
+app.post('/upload/directory', upload.array('files[]'), async (req, res) => {
+    const files = req.files;
+    const isLastBatch = req.body.isLastBatch === 'true';
+    const currentBatch = parseInt(req.body.currentBatch, 10);
+    const totalBatches = parseInt(req.body.totalBatches, 10);
+    const totalFiles = parseInt(req.body.totalFiles, 10);
+
+    console.log(`Received batch ${currentBatch}/${totalBatches} with ${files.length} files. Total files: ${totalFiles}`);
+
+    if (isLastBatch) {
+        try {
+            await indexUploadedImages();
+            console.log(`Indexing complete. Total files indexed: ${req.body.totalFiles}`);
+            res.send({ message: `Indexing complete. ${req.body.totalFiles} files indexed successfully.`, indexingComplete: true });
+        } catch (error) {
+            console.error('Error during indexing:', error);
+            res.status(500).send({ message: 'Error during indexing', error: error.message });
+        }
+    } else {
+        res.send({ message: `${files.length} files uploaded successfully. Awaiting more...` });
+    }
 });
 
 
