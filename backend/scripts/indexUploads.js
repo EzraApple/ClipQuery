@@ -6,9 +6,6 @@ function indexUploadedImages() {
         console.log('Starting environment setup...');
         const setupProcess = spawn('./scripts/setup_environment.sh');
 
-        setupProcess.stdout.on('data', (data) => {
-            console.log(`Setup stdout: ${data}`);
-        });
 
         setupProcess.stderr.on('data', (data) => {
             console.error(`Setup stderr: ${data}`);
