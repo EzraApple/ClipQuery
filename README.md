@@ -17,8 +17,8 @@ similarity searches.
 To get this platform running on your local machine, follow these steps:
 1. **Clone the Repository**
 ```bash
-git clone https://github.com/USERNAME/clip_search.git
-cd clip-image-search
+git clone https://github.com/USERNAME/ClipQuery.git
+cd ClipQuery
 ```
 2. **Install Dependencies**
 ```bash
