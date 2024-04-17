@@ -1,4 +1,5 @@
 # ClipQuery
+<!--- current name choice lol-->
 ![unrelatd ai image](assets/image_grid.webp)
 ## Introduction
 Welcome to my CLIP Image Search tool—a personal endeavor to harness the power of [OpenAI's CLIP
