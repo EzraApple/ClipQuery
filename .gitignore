@@ -1,4 +1,6 @@
+node_modules
 venv
+env
 __pycache__
 .idea
 .DS_Store

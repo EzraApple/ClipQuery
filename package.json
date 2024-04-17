@@ -1,0 +1,13 @@
+{
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "rimraf": "^5.0.5"
+  },
+  "scripts": {
+    "clean": "rimraf frontend/node_modules/ && rimraf backend/node_modules/ && rimraf node_modules/",
+    "install:frontend": "npm install --prefix frontend",
+    "install:backend": "npm install --prefix backend",
+    "install": "npm run install:frontend && npm run install:backend",
+    "start": "concurrently \"npm run --prefix frontend dev\" \"npm run --prefix backend start\""
+  }
+}

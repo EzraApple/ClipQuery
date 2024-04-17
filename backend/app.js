@@ -26,15 +26,14 @@ async function clearDirectory(directory) {
 
 })();
 
-// Strorage for uploaded directory
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, 'uploads/')
   },
   filename: function (req, file, cb) {
-    // const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    // cb(null, uniqueSuffix + '-' + file.originalname);
-    cb(null, file.originalname);
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, uniqueSuffix + '-' + file.originalname);
+    // cb(null, file.originalname);
   }
 });
 const upload = multer({ storage: storage });
@@ -43,6 +42,11 @@ const app = express();
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use(cors());
+
+const port = process.env.PORT || 3000; // Use the environment's port or 3000 if not specified
+const server = app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
 
 
 app.post('/upload/text', (req, res) => {
@@ -151,8 +155,28 @@ app.post('/upload/directory', upload.array('files[]'), async (req, res) => {
     }
 });
 
+async function shutdown() {
+    console.log('Server is shutting down gracefully...');
 
-const port = process.env.PORT || 3000; // Use the environment's port or 3000 if not specified
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+    try {
+        await clearDirectory("uploads");
+        await clearDirectory("index");
+        await clearDirectory("temp");
+        console.log('Upload directories cleared...');
+    } catch (error) {
+        console.error('Failed to clear directories:', error);
+    }
+
+    server.close(() => {
+        console.log('Closed out remaining connections.');
+        process.exit(0);
+    });
+
+    setTimeout(() => {
+        console.error('Could not close connections in time, forcefully shutting down');
+        process.exit(1);
+        }, 10000);
+}
+
+process.on('SIGINT', shutdown);
+process.on('SIGTERM', shutdown);
