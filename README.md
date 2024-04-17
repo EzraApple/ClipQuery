@@ -14,7 +14,7 @@ similarity searches.
 - **Nearest Neighbor Display**: The 16 most similar images are displayed in response to a query.
 
 ## Setup
-To get this platform running on your local machine, follow these steps:
+To get this platform running on your local machine, follow these steps in your terminal:
 1. **Clone the Repository**
 ```bash
 git clone https://github.com/USERNAME/ClipQuery.git
@@ -28,6 +28,12 @@ npm install
 ```bash
 npm run start
 ```
+4. **Navigate to Frontend**
+```bash
+VITE v5.1.5  ready in 215 ms
+      ➜  Local:   http://localhost:5173/
+```
+Go to the link that appears in your terminal. It should default to ``5173``.
 ## Usage
 1. Upload Images
      - Click the **Upload Directory** button to upload the images you want to search through
