@@ -2,9 +2,26 @@ import sys
 import os
 import pickle
 import torch
+from torch.utils.data import Dataset, DataLoader, dataloader
 from annoy import AnnoyIndex
 from PIL import Image
 from transformers import CLIPProcessor, CLIPVisionModelWithProjection
+import time
+
+
+class ImageDataset(Dataset):
+    def __init__(self, image_paths, processor):
+        self.image_paths = image_paths
+        self.processor = processor
+
+    def __len__(self):
+        return len(self.image_paths)
+
+    def __getitem__(self, idx):
+        image_path = self.image_paths[idx]
+        image = Image.open(image_path).convert("RGB")
+        processed = self.processor(images=image, return_tensors="pt")
+        return processed['pixel_values'].squeeze(0)
 
 
 def load_model():
@@ -15,30 +32,30 @@ def load_model():
 
 def embed_images(uploads_dir):
     model, processor = load_model()
-    device = "cuda" if torch.cuda.is_available() else "cpu"
+    device = "cuda" if torch.cuda.is_available() else ("mps" if torch.backends.mps.is_available() else "cpu")
     model.to(device)
-    embeddings = {}
 
-    count = 0
-    for image_name in os.listdir(uploads_dir):
-        count += 1
-        image_path = os.path.join(uploads_dir, image_name)
-        if os.path.isfile(image_path):
-            image = Image.open(image_path).convert("RGB")
+    if device in ["cuda", "mps"]:
+        model = model.half()
+        print(f"Using half precision on {device}")
 
-            # Process the image and prepare for the model
-            inputs = processor(images=image, return_tensors="pt")
-            inputs = {k: v.to(device) for k, v in inputs.items()}
+    image_paths = [os.path.join(uploads_dir, fname) for fname in os.listdir(uploads_dir) if
+                   os.path.isfile(os.path.join(uploads_dir, fname))]
+    dataset = ImageDataset(image_paths, processor)
+    data_loader = DataLoader(dataset, batch_size=96, shuffle=False, num_workers=4)
 
-            # Generate image embedding
-            with torch.no_grad():
-                outputs = model(**inputs)
-                image_embedding = outputs.image_embeds
-                image_embedding = image_embedding.cpu().numpy()
-                embeddings[image_name] = image_embedding.squeeze()
+    embeddings_list = []
+    with torch.no_grad():
+        for pixel_values in data_loader:
+            pixel_values = pixel_values.to(device)
+            if device in ["cuda", "mps"]:
+                pixel_values = pixel_values.half()
+            embeddings_batch = model(pixel_values=pixel_values).image_embeds
+            embeddings_list.append(embeddings_batch)
 
-            # For now, just print the embedding shape
-    print(f"Upload Embedding Complete | {count} images")
+    all_embeddings = torch.cat(embeddings_list, dim=0).cpu().numpy()
+    embeddings = {os.path.basename(image_paths[i]): all_embeddings[i] for i in range(len(image_paths))}
+
     return embeddings
 
 
@@ -48,7 +65,7 @@ def create_index(embeddings, index_dir):
     for i, (image_name, embedding) in enumerate(embeddings.items()):
         id_to_filename[i] = image_name
         index.add_item(i, embedding)
-    index.build(100, 2)
+    index.build(128, 2)
 
     index.save(index_dir + "vector_index.ann")
     with open(index_dir + "id_to_filename.pkl", "wb") as f:
@@ -63,5 +80,10 @@ if __name__ == "__main__":
     uploads_directory = './uploads/'
     index_directory = './index/'
 
+    start = time.time()
+
     embedding_dict = embed_images(uploads_directory)
+    embedded = time.time()
     create_index(embedding_dict, index_directory)
+    completed = time.time()
+    print(f"\nTotal time: {completed - start} seconds | {embedded - start} seconds to embed | {completed - embedded} seconds to index")

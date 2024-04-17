@@ -22,7 +22,6 @@ function indexUploadedImages() {
             } else {
                 console.log('Environment setup complete. Starting indexing...');
 
-                // Adjust the command if necessary. Use 'python' or 'python3' depending on your environment
                 const pythonInterpreterPath = path.join(__dirname, './python/env/bin/python');
                 const scriptPath = path.join(__dirname, 'python/index_uploads.py'); // Adjust the path to your Python script
 

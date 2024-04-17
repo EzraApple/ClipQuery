@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const sendFiles = async (files, setIndexing, batchSize = 10) => {
+const sendFiles = async (files, setIndexing, batchSize = 128) => {
     // Determine the total number of batches
     const totalBatches = Math.ceil(files.length / batchSize);
     const totalFiles = files.length;
@@ -29,13 +29,12 @@ const sendFiles = async (files, setIndexing, batchSize = 10) => {
                 }
             });
             if (response.data.indexingComplete) {
-                console.log('It should re-enable')
-                setIndexing(false); // Re-enable inputs
+                setIndexing(false);
             }
             console.log(`Batch ${i + 1}/${totalBatches}:`, response.data.message);
         } catch (error) {
             console.error('Error uploading batch:', error);
-            // Optionally, break or return here if you want to stop processing further batches on error
+            return;
         }
     }
 };

@@ -26,7 +26,7 @@ function imageQuery(imagePath, callback) {
         const pythonInterpreterPath = path.join(__dirname, './python/env/bin/python');  // Adjust as needed
         const scriptPath = path.join(__dirname, 'python/query_index.py');  // Adjust as needed
 
-        const queryProcess = spawn(pythonInterpreterPath, [scriptPath, 'image', imagePath, 12]);
+        const queryProcess = spawn(pythonInterpreterPath, [scriptPath, 'image', imagePath, 16]);
         let outputData = '';
         queryProcess.stdout.on('data', (data) => {
             outputData += data;
