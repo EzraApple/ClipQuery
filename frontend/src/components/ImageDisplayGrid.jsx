@@ -1,12 +1,14 @@
-import { SimpleGrid, Center, Spinner } from '@chakra-ui/react';
+import {SimpleGrid, Center, Spinner, VStack, Text} from '@chakra-ui/react';
 import ImageTile from './ImageTile';
+import React from "react";
 
 const ImageDisplayGrid = ({ images, isLoading }) => {
     if (isLoading) {
         return (
-            <Center w="100%" h="100px">
+            <VStack w="100%" h="100px">
+                <Text>Searching...</Text>
                 <Spinner size="xl" />
-            </Center>
+            </VStack>
         );
     }
     return (

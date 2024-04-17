@@ -1,10 +1,11 @@
 import React, {useState} from 'react';
-import {Box, HStack, VStack, Text, Progress} from '@chakra-ui/react';
+import {Box, HStack, VStack, Text, Progress, Spinner, Center, Spacer} from '@chakra-ui/react';
 import TextInput from './TextInput';
 import ImageUploader from './ImageUploader';
 import sendQuery from "../scripts/sendQuery.js"
 import sendFiles from "../scripts/sendFiles.js"
 import DirectoryUploader from "./DirectoryUploader.jsx";
+
 
 const SearchBar = ({onSearchSubmit, onStartSearch }) => {
     const [disableSearch, setDisableSearch] = useState(false)
@@ -32,9 +33,9 @@ const SearchBar = ({onSearchSubmit, onStartSearch }) => {
             </HStack>
             {disableSearch &&
                 (
-                    <VStack width="100%">
-                        <Progress size="xs" isIndeterminate colorScheme='blue' width={'100%'} background={'#181818'}/>
-                        <Text>Indexing images, please wait...</Text>
+                    <VStack w="100%" h="100px">
+                        <Text>Indexing uploads...</Text>
+                        <Spinner size="xl" />
                     </VStack>
                 )
             }
