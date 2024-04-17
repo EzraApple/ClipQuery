@@ -1,5 +1,5 @@
 # CLIP Image Search
-![ai image](assets/image_grid.webp)
+![unrelatd ai image](assets/image_grid.webp)
 ## Introduction
 Welcome to my CLIP Image Search tool—a personal endeavor to harness the power of [OpenAI's CLIP
 model](https://openai.com/research/clip) for image and text-based search functionalities. This tool enables the embedding and 
