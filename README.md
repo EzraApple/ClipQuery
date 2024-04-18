@@ -55,3 +55,12 @@ Go to the link that appears in your terminal. It should default to ``5173``.
 
 ### Data Handling
 - **Node.js & Express.js**: While Python handles machine learning operations, Node.js with Express.js is used for overall server management, including request handling, file uploads, and serving query results.
+
+## CIFAR100 Demo
+
+I uploaded the CIFAR100 Training Dataset (50,000 32x32 PNG images in 100 classes) and searches by class label. The following are some screenshots of the first 8 results for each query. I think it worked pretty well.
+___
+<img width="1700" alt="squirrel query" src="https://github.com/EzraApple/ClipQuery/assets/99758970/341ab120-65cb-4bda-b45a-d8e128cd41c3">
+<img width="1700" alt="bridge query" src="https://github.com/EzraApple/ClipQuery/assets/99758970/7c88319e-8ce5-4285-875f-2d4a705a3e9f">
+<img width="1700" alt="train query" src="https://github.com/EzraApple/ClipQuery/assets/99758970/1c2b5c0b-0d8e-4836-9a7b-9ea6f25d5146">
+<img width="1700" alt="palm tree query" src="https://github.com/EzraApple/ClipQuery/assets/99758970/1407a010-7eb0-489c-9b8f-3bf33822d80c">
